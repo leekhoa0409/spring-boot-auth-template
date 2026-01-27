@@ -1,0 +1,57 @@
+package com.auth.template.auth.dto.response;
+
+import com.auth.template.common.constant.AuthProvider;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
+/**
+ * User Response DTO
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Schema(description = "User information response")
+public class UserResponse {
+
+    @Schema(description = "User ID", example = "1")
+    private Long id;
+
+    @Schema(description = "Username", example = "johndoe")
+    private String username;
+
+    @Schema(description = "Email", example = "john@example.com")
+    private String email;
+
+    @Schema(description = "Full name", example = "John Doe")
+    private String fullName;
+
+    @Schema(description = "Profile image URL")
+    private String imageUrl;
+
+    @Schema(description = "Email verified status", example = "true")
+    private Boolean emailVerified;
+
+    @Schema(description = "Account enabled status", example = "true")
+    private Boolean enabled;
+
+    @Schema(description = "Authentication provider", example = "LOCAL")
+    private AuthProvider provider;
+
+    @Schema(description = "User role", example = "ROLE_USER")
+    private String role;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Schema(description = "Account creation timestamp", example = "2026-01-24 10:00:00")
+    private LocalDateTime createdAt;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Schema(description = "Last login timestamp", example = "2026-01-24 10:30:00")
+    private LocalDateTime lastLoginAt;
+}

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #f4f4f4;
+            border-radius: 10px;
+            padding: 30px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .feature {
+            background-color: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Welcome to Auth Template!</h1>
+        </div>
+        <p>Hi <span th:text="${username}"></span>,</p>
+        <p>Welcome aboard! We're excited to have you as part of our community.</p>
+
+        <h3>What's Next?</h3>
+        <div class="feature">
+            <strong>✓ Complete Your Profile</strong><br>
+            Add more information to personalize your experience.
+        </div>
+        <div class="feature">
+            <strong>✓ Explore Features</strong><br>
+            Check out all the amazing features we have to offer.
+        </div>
+        <div class="feature">
+            <strong>✓ Stay Secure</strong><br>
+            Enable two-factor authentication for extra security.
+        </div>
+
+        <p>If you have any questions, feel free to reach out to our support team.</p>
+
+        <div class="footer">
+            <p>Thank you for choosing Auth Template!</p>
+            <p>&copy; 2026 Auth Template. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+
+</html>

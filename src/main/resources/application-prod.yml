@@ -1,0 +1,99 @@
+spring:
+  # Database Configuration (Production)
+  datasource:
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+  
+  # JPA/Hibernate
+  jpa:
+    hibernate:
+      ddl-auto: validate  # Never use 'update' or 'create' in production
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+  
+  # Email Configuration (Production)
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          ssl:
+            trust: ${MAIL_HOST}
+  
+  # OAuth2 Configuration (Production)
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope:
+              - email
+              - profile
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+          
+          github:
+            client-id: ${GITHUB_CLIENT_ID}
+            client-secret: ${GITHUB_CLIENT_SECRET}
+            scope:
+              - user:email
+              - read:user
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+          
+          facebook:
+            client-id: ${FACEBOOK_CLIENT_ID}
+            client-secret: ${FACEBOOK_CLIENT_SECRET}
+            scope:
+              - email
+              - public_profile
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+
+# JWT Configuration (Production - MUST use environment variables)
+jwt:
+  secret: ${JWT_SECRET}
+  access-token-expiration: ${JWT_ACCESS_EXPIRATION:3600000}
+  refresh-token-expiration: ${JWT_REFRESH_EXPIRATION:86400000}
+  issuer: ${JWT_ISSUER:auth-template}
+  audience: ${JWT_AUDIENCE:auth-template-users}
+
+# CORS Configuration (Production)
+cors:
+  allowed-origins: ${CORS_ALLOWED_ORIGINS}
+
+# Application Configuration (Production)
+app:
+  frontend-url: ${FRONTEND_URL}
+  email:
+    from: ${EMAIL_FROM}
+    verification-expiration: 86400000
+    reset-expiration: 3600000
+
+# Logging Configuration (Production)
+logging:
+  level:
+    com.auth.template: INFO
+    org.springframework.security: WARN
+    org.springframework.web: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: /var/log/auth-template/application.log
+    max-size: 10MB
+    max-history: 30

@@ -1,4 +1,4 @@
-package com.auth.template.config.security;
+package com.auth.template.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfigurationSource;
+
+import com.auth.template.config.security.JwtAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity

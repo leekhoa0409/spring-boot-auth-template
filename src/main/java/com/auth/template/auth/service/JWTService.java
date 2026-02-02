@@ -1,7 +1,8 @@
 package com.auth.template.auth.service;
 
-import com.auth.template.config.security.JwtProperties;
 import com.auth.template.common.exception.JwtAuthenticationException;
+import com.auth.template.config.security.JwtProperties;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;

@@ -1,9 +1,9 @@
 package com.auth.template.auth.service;
 
 import com.auth.template.auth.entity.PasswordResetToken;
-import com.auth.template.auth.entity.User;
 import com.auth.template.auth.entity.VerificationToken;
 import com.auth.template.common.exception.TokenException;
+import com.auth.template.user.entity.User;
 import com.auth.template.user.repository.PasswordResetTokenRepository;
 import com.auth.template.user.repository.UserRepository;
 import com.auth.template.user.repository.VerificationTokenRepository;

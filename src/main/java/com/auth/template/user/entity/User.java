@@ -1,4 +1,4 @@
-package com.auth.template.auth.entity;
+package com.auth.template.user.entity;
 
 import com.auth.template.common.constant.AuthProvider;
 import jakarta.persistence.*;

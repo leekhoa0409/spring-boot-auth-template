@@ -53,10 +53,11 @@ public class UserController {
         return ResponseEntity.ok(Map.of("message", "Password changed successfully"));
     }
 
-    @DeleteMapping("/me")
-    @Operation(summary = "Delete account")
-    public ResponseEntity<Map<String, String>> deleteAccount(@AuthenticationPrincipal UserDetails userDetails) {
-        userService.deleteAccount(userDetails.getUsername());
-        return ResponseEntity.ok(Map.of("message", "Account deleted successfully"));
-    }
+    // @DeleteMapping("/me")
+    // @Operation(summary = "Delete account")
+    // public ResponseEntity<Map<String, String>>
+    // deleteAccount(@AuthenticationPrincipal UserDetails userDetails) {
+    // userService.deleteAccount(userDetails.getUsername());
+    // return ResponseEntity.ok(Map.of("message", "Account deleted successfully"));
+    // }
 }

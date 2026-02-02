@@ -5,6 +5,8 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+import com.auth.template.user.entity.User;
+
 /**
  * Email Verification Token Entity
  */

@@ -1,7 +1,8 @@
 package com.auth.template.user.repository;
 
-import com.auth.template.auth.entity.User;
 import com.auth.template.common.constant.AuthProvider;
+import com.auth.template.user.entity.User;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

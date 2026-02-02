@@ -1,7 +1,7 @@
 package com.auth.template.auth.service;
 
-import com.auth.template.auth.entity.User;
 import com.auth.template.auth.entity.UserPrincipal;
+import com.auth.template.user.entity.User;
 import com.auth.template.user.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

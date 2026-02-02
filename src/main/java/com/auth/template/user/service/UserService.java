@@ -2,11 +2,12 @@ package com.auth.template.user.service;
 
 import com.auth.template.auth.dto.request.ChangePasswordRequest;
 import com.auth.template.auth.dto.response.UserResponse;
-import com.auth.template.auth.entity.User;
+import com.auth.template.user.entity.User;
 import com.auth.template.user.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,6 +49,7 @@ public class UserService {
     }
 
     @Transactional
+    @CacheEvict(value = "users", key = "#username")
     public void changePassword(String username, ChangePasswordRequest request) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));

@@ -9,7 +9,7 @@ spring:
   # JPA/Hibernate
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
     properties:
       hibernate:
@@ -28,8 +28,7 @@ spring:
           auth: true
           starttls:
             enable: true
-    # For development, you can use a fake SMTP server like MailHog
-  
+
   # OAuth2 Configuration
   security:
     oauth2:
@@ -38,11 +37,11 @@ spring:
           google:
             client-id: ${GOOGLE_CLIENT_ID:your-google-client-id}
             client-secret: ${GOOGLE_CLIENT_SECRET:your-google-client-secret}
+            authorization-grant-type: authorization_code
             scope:
               - email
               - profile
-            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
-          
+
 #          github:
 #            client-id: ${GITHUB_CLIENT_ID:your-github-client-id}
 #            client-secret: ${GITHUB_CLIENT_SECRET:your-github-client-secret}
@@ -88,3 +87,5 @@ logging:
     org.springframework.boot.context.config: DEBUG
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+
+#debug: true

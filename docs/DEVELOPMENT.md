@@ -431,45 +431,47 @@ spring:
 - **Methods**: camelCase (`getUserById`, `validateToken`)
 - **Variables**: camelCase (`accessToken`, `userRepository`)
 - **Constants**: UPPER_SNAKE_CASE (`MAX_FAILED_ATTEMPTS`)
-- **Packages**: lowercase (`com.auth.template.auth.service`)
+- **Packages**: lowercase (`com.auth.template.modules.auth.service`)
 
 ### Code Organization
 
 ```java
 // 1. Package declaration
-package com.auth.template.auth.service;
+package com.auth.template.modules.auth.service;
 
 // 2. Imports (organized)
+
 import com.auth.template...;
 import org.springframework...;
 import java.util...;
 
 // 3. Class JavaDoc
+
 /**
  * Service for handling authentication operations
  */
 @Service
 public class AuthService {
-    
+
     // 4. Constants
     private static final Logger logger = ...;
-    
+
     // 5. Dependencies (final, injected via constructor)
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    
+
     // 6. Constructor
     @Autowired
     public AuthService(...) {
         this.userRepository = userRepository;
         ...
     }
-    
+
     // 7. Public methods
     public UserResponse register(...) {
         ...
     }
-    
+
     // 8. Private methods
     private UserResponse mapToUserResponse(...) {
         ...

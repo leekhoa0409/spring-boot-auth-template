@@ -1,4 +1,4 @@
-package com.auth.template.common.exception;
+package com.auth.template.common.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -9,11 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-/**
- * Standardized error response DTO
- */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,16 +18,8 @@ import java.util.List;
 @Schema(description = "Error response")
 public class ErrorResponse {
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "Timestamp", example = "2026-01-24 10:00:00")
-    @Builder.Default
-    private LocalDateTime timestamp = LocalDateTime.now();
-
     @Schema(description = "HTTP status code", example = "400")
-    private int status;
-
-    @Schema(description = "Error type", example = "Bad Request")
-    private String error;
+    private int code;
 
     @Schema(description = "Error message", example = "Invalid input data")
     private String message;
@@ -39,6 +27,8 @@ public class ErrorResponse {
     @Schema(description = "Request path", example = "/api/auth/login")
     private String path;
 
-    @Schema(description = "Validation errors")
-    private List<String> errors;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Schema(description = "Timestamp", example = "2026-01-24 10:00:00")
+    @Builder.Default
+    private LocalDateTime timestamp = LocalDateTime.now();
 }

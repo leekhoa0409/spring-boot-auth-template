@@ -1,8 +1,9 @@
 package com.auth.template.modules.auth.service;
 
+import com.auth.template.common.exception.AppException;
+import com.auth.template.common.exception.ErrorCode;
 import com.auth.template.modules.auth.entity.PasswordResetToken;
 import com.auth.template.modules.auth.entity.VerificationToken;
-import com.auth.template.common.exception.TokenException;
 import com.auth.template.modules.user.entity.User;
 import com.auth.template.modules.user.repository.PasswordResetTokenRepository;
 import com.auth.template.modules.user.repository.UserRepository;
@@ -45,14 +46,14 @@ public class TokenService {
     @Transactional
     public void verifyEmail(String token) {
         VerificationToken verificationToken = verificationTokenRepository.findByToken(token)
-                .orElseThrow(() -> new TokenException("Invalid verification token"));
+                .orElseThrow(() -> new AppException(ErrorCode.INVALID_VERIFICATION_TOKEN));
 
         if (verificationToken.getUsed()) {
-            throw new TokenException("Token has already been used");
+            throw new AppException(ErrorCode.VERIFICATION_TOKEN_USED);
         }
 
         if (verificationToken.isExpired()) {
-            throw new TokenException("Token has expired");
+            throw new AppException(ErrorCode.TOKEN_EXPIRED);
         }
 
         User user = verificationToken.getUser();
@@ -79,14 +80,14 @@ public class TokenService {
     @Transactional
     public User validatePasswordResetToken(String token) {
         PasswordResetToken resetToken = passwordResetTokenRepository.findByToken(token)
-                .orElseThrow(() -> new TokenException("Invalid reset token"));
+                .orElseThrow(() -> new AppException(ErrorCode.INVALID_RESET_PASSWORD_TOKEN));
 
         if (resetToken.getUsed()) {
-            throw new TokenException("Token has already been used");
+            throw new AppException(ErrorCode.VERIFICATION_TOKEN_USED);
         }
 
         if (resetToken.isExpired()) {
-            throw new TokenException("Token has expired");
+            throw new AppException(ErrorCode.TOKEN_EXPIRED);
         }
 
         resetToken.setUsed(true);

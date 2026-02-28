@@ -1,6 +1,7 @@
 package com.auth.template.modules.auth.service;
 
-import com.auth.template.common.exception.JwtAuthenticationException;
+import com.auth.template.common.exception.AppException;
+import com.auth.template.common.exception.ErrorCode;
 import com.auth.template.security.JwtProperties;
 
 import io.jsonwebtoken.Claims;
@@ -68,7 +69,7 @@ public class JWTService {
                     .compact();
         } catch (Exception e) {
             logger.error("Error generating JWT token: {}", e.getMessage());
-            throw new JwtAuthenticationException("Failed to generate JWT token", e);
+            throw new AppException(ErrorCode.JWT_GENERATE_TOKEN);
         }
     }
 
@@ -81,7 +82,7 @@ public class JWTService {
                     .getPayload();
         } catch (Exception e) {
             logger.error("Error parsing JWT token: {}", e.getMessage());
-            throw new JwtAuthenticationException("Failed to parse JWT token", e);
+            throw new AppException(ErrorCode.JWT_PARSE_TOKEN);
         }
     }
 
@@ -95,7 +96,7 @@ public class JWTService {
             return extractClaim(token, Claims::getSubject);
         } catch (Exception e) {
             logger.error("Error extracting username from token: {}", e.getMessage());
-            throw new JwtAuthenticationException("Invalid JWT token", e);
+            throw new AppException(ErrorCode.JWT_INVALID_TOKEN);
         }
     }
 

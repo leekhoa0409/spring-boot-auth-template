@@ -1,12 +1,13 @@
 package com.auth.template.modules.auth.service;
 
+import com.auth.template.common.exception.AppException;
+import com.auth.template.common.exception.ErrorCode;
+import com.auth.template.mapper.UserMapper;
 import com.auth.template.modules.auth.dto.request.*;
 import com.auth.template.modules.auth.dto.response.AuthResponse;
 import com.auth.template.modules.auth.dto.response.UserResponse;
-import com.auth.template.modules.auth.entity.UserPrincipal;
+import com.auth.template.modules.auth.entity.CustomUserDetails;
 import com.auth.template.common.constant.AuthProvider;
-import com.auth.template.common.exception.AccountLockedException;
-import com.auth.template.common.exception.UserAlreadyExistsException;
 import com.auth.template.modules.user.entity.User;
 import com.auth.template.modules.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -34,17 +35,20 @@ public class AuthService {
     private final JWTService jwtService;
     private final TokenService tokenService;
     private final EmailService emailService;
+    private final UserMapper userMapper;
 
     @Transactional
     public UserResponse register(RegisterRequest request) {
+
         logger.info("Attempting to register user: {}", request.getUsername());
 
+
         if (userRepository.existsByUsername(request.getUsername())) {
-            throw new UserAlreadyExistsException(request.getUsername());
+            throw new AppException(ErrorCode.USER_ALREADY_EXISTED);
         }
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new UserAlreadyExistsException("Email already in use");
+            throw new AppException(ErrorCode.USER_ALREADY_EXISTED);
         }
 
         User user = User.builder()
@@ -57,7 +61,7 @@ public class AuthService {
                 .enabled(true)
                 .build();
 
-        User savedUser = userRepository.save(user);
+        User savedUser = userRepository.saveAndFlush(user);
 
         // Send verification email
         try {
@@ -68,8 +72,8 @@ public class AuthService {
         }
 
         logger.info("User registered successfully: {}", savedUser.getUsername());
-
-        return mapToUserResponse(savedUser);
+        logger.info("User registered successfully: {}", savedUser.getCreatedAt());
+        return userMapper.toUserResponse(savedUser);
     }
 
     public AuthResponse login(LoginRequest request) {
@@ -84,7 +88,7 @@ public class AuthService {
                 user.unlock();
                 userRepository.save(user);
             } else {
-                throw new AccountLockedException("Account is locked due to multiple failed login attempts");
+                throw new AppException(ErrorCode.ACCOUNT_LOCKED);
             }
         }
 
@@ -135,7 +139,7 @@ public class AuthService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        UserDetails userDetails = new UserPrincipal(user);
+        UserDetails userDetails = new CustomUserDetails(user);
 
         String newAccessToken = jwtService.generateAccessToken(userDetails);
         String newRefreshToken = jwtService.generateRefreshToken(username);
@@ -170,21 +174,5 @@ public class AuthService {
         User user = tokenService.validatePasswordResetToken(request.getToken());
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
-    }
-
-    private UserResponse mapToUserResponse(User user) {
-        return UserResponse.builder()
-                .id(user.getId())
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .fullName(user.getFullName())
-                .imageUrl(user.getImageUrl())
-                .emailVerified(user.getEmailVerified())
-                .enabled(user.getEnabled())
-                .provider(user.getProvider())
-                .role(user.getRole())
-                .createdAt(user.getCreatedAt())
-                .lastLoginAt(user.getLastLoginAt())
-                .build();
     }
 }

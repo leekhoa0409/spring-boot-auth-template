@@ -29,7 +29,6 @@ import com.auth.template.security.JwtAuthenticationFilter;
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final UserDetailsService userDetailsService;
     private final CorsConfigurationSource corsConfigurationSource;
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 

@@ -1,6 +1,6 @@
 package com.auth.template.modules.auth.service;
 
-import com.auth.template.modules.auth.entity.UserPrincipal;
+import com.auth.template.modules.auth.entity.CustomUserDetails;
 import com.auth.template.modules.user.entity.User;
 import com.auth.template.modules.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -39,6 +39,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
 
         logger.debug("User found: {}", username);
-        return new UserPrincipal(user);
+        return new CustomUserDetails(user);
     }
 }

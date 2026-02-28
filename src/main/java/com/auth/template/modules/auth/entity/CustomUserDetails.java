@@ -1,9 +1,6 @@
 package com.auth.template.modules.auth.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,14 +14,13 @@ import java.util.Map;
 import java.util.UUID;
 
 @Getter
-public class UserPrincipal implements UserDetails, OAuth2User {
+public class CustomUserDetails implements UserDetails, OAuth2User {
 
     private final User user;
 
-    public UserPrincipal(User user) {
+    public CustomUserDetails(User user) {
         this.user = user;
     }
-
 
     // Implement UserDetails
     @Override

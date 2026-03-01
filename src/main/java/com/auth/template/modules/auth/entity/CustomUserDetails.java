@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Getter
 public class CustomUserDetails implements UserDetails, OAuth2User {
@@ -25,7 +26,9 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
     // Implement UserDetails
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(user.getRole()));
+        return user.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getRoleName()))
+                .collect(Collectors.toList());
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.auth.template.modules.auth.service;
 
 import com.auth.template.common.exception.AppException;
 import com.auth.template.common.exception.ErrorCode;
+import com.auth.template.modules.user.entity.Role;
 import com.auth.template.security.JwtProperties;
 
 import io.jsonwebtoken.Claims;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -39,9 +41,10 @@ public class JWTService {
         Map<String, Object> claims = new HashMap<>();
 
         // Add roles/authorities to claims
-        String roles = userDetails.getAuthorities().stream()
+        List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
+                .map(role -> role.startsWith("ROLE_") ? role.substring(5) : role)
+                .collect(Collectors.toList());
         claims.put("roles", roles);
 
         return generateToken(claims, userDetails.getUsername(), jwtProperties.getAccessTokenExpiration());

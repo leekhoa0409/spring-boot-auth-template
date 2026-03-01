@@ -1,14 +1,14 @@
 package com.auth.template.common.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Builder
 public class ApiResponse <T> {
     private int code = 1000;
     private String message;

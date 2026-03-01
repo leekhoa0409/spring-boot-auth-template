@@ -1,7 +1,9 @@
 package com.auth.template.modules.auth.dto.response;
 
 import com.auth.template.common.constant.AuthProvider;
+import com.auth.template.modules.user.entity.Role;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -16,6 +19,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Schema(description = "User information response")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserResponse {
 
     @Schema(description = "User ID", example = "1")
@@ -43,7 +47,7 @@ public class UserResponse {
     private AuthProvider provider;
 
     @Schema(description = "User role", example = "ROLE_USER")
-    private String role;
+    private Set<Role> roles;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Schema(description = "Account creation timestamp", example = "2026-01-24 10:00:00")

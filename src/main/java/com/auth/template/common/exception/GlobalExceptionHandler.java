@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
                 errorResponse.setCode(errorCode.getCode());
                 errorResponse.setMessage(errorCode.getMessage());
                 errorResponse.setPath(request.getRequestURI());
-                return ResponseEntity.badRequest().body(errorResponse);
+                return ResponseEntity.status(errorCode.getHttpStatusCode()).body(errorResponse);
         }
 
         @ExceptionHandler(Exception.class)
@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
                 errorResponse.setMessage(ErrorCode.UNCATEGORIZED.getMessage());
                 errorResponse.setCode(ErrorCode.UNCATEGORIZED.getCode());
                 errorResponse.setPath(request.getRequestURI());
-                return ResponseEntity.badRequest().body(errorResponse);
+                return ResponseEntity.internalServerError().body(errorResponse);
         }
 
         @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -48,6 +48,6 @@ public class GlobalExceptionHandler {
                 errorResponse.setCode(errorCode.getCode());
                 errorResponse.setMessage(errorCode.getMessage());
                 errorResponse.setPath(request.getRequestURI());
-                return ResponseEntity.badRequest().body(errorResponse);
+                return ResponseEntity.status(errorCode.getHttpStatusCode()).body(errorResponse);
         }
 }

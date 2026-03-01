@@ -13,13 +13,11 @@ import lombok.NoArgsConstructor;
 @Schema(description = "Login request")
 public class LoginRequest {
 
-    @NotBlank(message = "Username is required")
-    @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
+    @NotBlank(message = "USERNAME_REQUIRED")
     @Schema(description = "Username", example = "johndoe")
     private String username;
 
-    @NotBlank(message = "Password is required")
-    @Size(min = 6, message = "Password must be at least 6 characters")
+    @NotBlank(message = "PASSWORD_REQUIRED")
     @Schema(description = "Password", example = "SecurePass123")
     private String password;
 

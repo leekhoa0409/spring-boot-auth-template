@@ -8,7 +8,9 @@ import com.auth.template.modules.auth.dto.response.AuthResponse;
 import com.auth.template.modules.auth.dto.response.UserResponse;
 import com.auth.template.modules.auth.entity.CustomUserDetails;
 import com.auth.template.common.constant.AuthProvider;
+import com.auth.template.modules.user.entity.Role;
 import com.auth.template.modules.user.entity.User;
+import com.auth.template.modules.user.repository.RoleRepository;
 import com.auth.template.modules.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -22,6 +24,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -36,6 +40,7 @@ public class AuthService {
     private final TokenService tokenService;
     private final EmailService emailService;
     private final UserMapper userMapper;
+    private final RoleRepository roleRepository;
 
     @Transactional
     public UserResponse register(RegisterRequest request) {
@@ -51,12 +56,16 @@ public class AuthService {
             throw new AppException(ErrorCode.USER_ALREADY_EXISTED);
         }
 
+        Set<Role> roles = new HashSet<>();
+        roleRepository.findById("USER").ifPresent(roles::add);
+
         User user = User.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .fullName(request.getFullName())
                 .provider(AuthProvider.LOCAL)
+                .roles(roles)
                 .emailVerified(false)
                 .enabled(true)
                 .build();
@@ -72,10 +81,10 @@ public class AuthService {
         }
 
         logger.info("User registered successfully: {}", savedUser.getUsername());
-        logger.info("User registered successfully: {}", savedUser.getCreatedAt());
         return userMapper.toUserResponse(savedUser);
     }
 
+    @Transactional
     public AuthResponse login(LoginRequest request) {
         logger.info("Attempting to authenticate user: {}", request.getUsername());
 

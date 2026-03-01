@@ -24,7 +24,7 @@ public class JwtProperties {
     @NotNull(message = "Refresh token expiration must not be null")
     private Long refreshTokenExpiration = 86400000L; // 24 hours
 
-    private String issuer = "spring-boot-template-app";
+    private String issuer = "auth-template-app";
 
-    private String audience = "spring-boot-template-users";
+    private String audience = "auth-template-users";
 }

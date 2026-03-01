@@ -7,6 +7,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -72,8 +74,8 @@ public class User {
     private String providerId; // OAuth2 provider user ID
 
     @Column(length = 50)
-    @Builder.Default
-    private String role = "ROLE_USER";
+    @ManyToMany
+    private Set<Role> roles;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -87,7 +89,7 @@ public class User {
         if (!accountLocked || lockTime == null) {
             return false;
         }
-        return LocalDateTime.now().isAfter(lockTime.plusMinutes(30));
+        return LocalDateTime.now().isAfter(lockTime.plusMinutes(5));
     }
 
     public void unlock() {

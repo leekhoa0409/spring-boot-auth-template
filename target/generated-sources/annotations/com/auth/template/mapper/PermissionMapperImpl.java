@@ -1,14 +1,14 @@
 package com.auth.template.mapper;
 
-import com.auth.template.modules.user.dto.request.PermissionRequest;
-import com.auth.template.modules.user.dto.response.PermissionResponse;
-import com.auth.template.modules.user.entity.Permission;
+import com.auth.template.modules.auth.dto.request.PermissionRequest;
+import com.auth.template.modules.auth.dto.response.PermissionResponse;
+import com.auth.template.modules.auth.entity.Permission;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-03-01T11:16:56+0700",
+    date = "2026-03-02T09:25:28+0700",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21 (Eclipse Adoptium)"
 )
 @Component

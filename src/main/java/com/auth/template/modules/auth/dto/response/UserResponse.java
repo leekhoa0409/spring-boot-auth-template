@@ -1,7 +1,7 @@
 package com.auth.template.modules.auth.dto.response;
 
 import com.auth.template.common.constant.AuthProvider;
-import com.auth.template.modules.user.entity.Role;
+import com.auth.template.modules.auth.entity.Role;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;

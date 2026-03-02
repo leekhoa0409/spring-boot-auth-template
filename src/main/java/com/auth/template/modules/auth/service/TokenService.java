@@ -53,7 +53,7 @@ public class TokenService {
         }
 
         if (verificationToken.isExpired()) {
-            throw new AppException(ErrorCode.TOKEN_EXPIRED);
+            throw new AppException(ErrorCode.VERIFICATION_TOKEN_EXPIRED);
         }
 
         User user = verificationToken.getUser();
@@ -87,7 +87,7 @@ public class TokenService {
         }
 
         if (resetToken.isExpired()) {
-            throw new AppException(ErrorCode.TOKEN_EXPIRED);
+            throw new AppException(ErrorCode.VERIFICATION_TOKEN_EXPIRED);
         }
 
         resetToken.setUsed(true);

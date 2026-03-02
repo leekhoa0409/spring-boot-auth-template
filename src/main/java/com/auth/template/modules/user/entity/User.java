@@ -1,13 +1,13 @@
 package com.auth.template.modules.user.entity;
 
 import com.auth.template.common.constant.AuthProvider;
+import com.auth.template.modules.auth.entity.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 

@@ -8,9 +8,9 @@ import com.auth.template.modules.auth.dto.response.AuthResponse;
 import com.auth.template.modules.auth.dto.response.UserResponse;
 import com.auth.template.modules.auth.entity.CustomUserDetails;
 import com.auth.template.common.constant.AuthProvider;
-import com.auth.template.modules.user.entity.Role;
+import com.auth.template.modules.auth.entity.Role;
 import com.auth.template.modules.user.entity.User;
-import com.auth.template.modules.user.repository.RoleRepository;
+import com.auth.template.modules.auth.repository.RoleRepository;
 import com.auth.template.modules.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -89,8 +89,7 @@ public class AuthService {
         logger.info("Attempting to authenticate user: {}", request.getUsername());
 
         User user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new org.springframework.security.core.userdetails.UsernameNotFoundException(
-                        "User not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         if (user.getAccountLocked()) {
             if (user.shouldUnlock()) {
@@ -133,7 +132,7 @@ public class AuthService {
             throw e;
         }
 
-        throw new RuntimeException("Authentication failed");
+        throw new AppException(ErrorCode.UNAUTHENTICATED);
     }
 
     public AuthResponse refreshToken(RefreshTokenRequest request) {

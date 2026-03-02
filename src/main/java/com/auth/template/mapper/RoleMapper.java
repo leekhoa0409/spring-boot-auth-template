@@ -1,8 +1,8 @@
 package com.auth.template.mapper;
 
-import com.auth.template.modules.user.dto.request.RoleRequest;
-import com.auth.template.modules.user.dto.response.RoleResponse;
-import com.auth.template.modules.user.entity.Role;
+import com.auth.template.modules.auth.dto.request.RoleRequest;
+import com.auth.template.modules.auth.dto.response.RoleResponse;
+import com.auth.template.modules.auth.entity.Role;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

@@ -4,7 +4,6 @@ import com.auth.template.mapper.UserMapper;
 import com.auth.template.modules.auth.dto.request.ChangePasswordRequest;
 import com.auth.template.modules.auth.dto.response.UserResponse;
 import com.auth.template.modules.user.entity.User;
-import com.auth.template.modules.user.repository.RoleRepository;
 import com.auth.template.modules.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;

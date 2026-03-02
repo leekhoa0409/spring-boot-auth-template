@@ -2,7 +2,6 @@ package com.auth.template.modules.auth.service;
 
 import com.auth.template.common.exception.AppException;
 import com.auth.template.common.exception.ErrorCode;
-import com.auth.template.modules.user.entity.Role;
 import com.auth.template.security.JwtProperties;
 
 import io.jsonwebtoken.Claims;
@@ -72,7 +71,7 @@ public class JWTService {
                     .compact();
         } catch (Exception e) {
             logger.error("Error generating JWT token: {}", e.getMessage());
-            throw new AppException(ErrorCode.JWT_GENERATE_TOKEN);
+            throw new AppException(ErrorCode.JWT_GENERATE_TOKEN_FAILED);
         }
     }
 
@@ -85,7 +84,7 @@ public class JWTService {
                     .getPayload();
         } catch (Exception e) {
             logger.error("Error parsing JWT token: {}", e.getMessage());
-            throw new AppException(ErrorCode.JWT_PARSE_TOKEN);
+            throw new AppException(ErrorCode.JWT_PARSE_TOKEN_FAILED);
         }
     }
 

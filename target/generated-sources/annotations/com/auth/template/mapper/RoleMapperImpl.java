@@ -1,9 +1,9 @@
 package com.auth.template.mapper;
 
-import com.auth.template.modules.user.dto.request.RoleRequest;
-import com.auth.template.modules.user.dto.response.RoleResponse;
-import com.auth.template.modules.user.entity.Permission;
-import com.auth.template.modules.user.entity.Role;
+import com.auth.template.modules.auth.dto.request.RoleRequest;
+import com.auth.template.modules.auth.dto.response.RoleResponse;
+import com.auth.template.modules.auth.entity.Permission;
+import com.auth.template.modules.auth.entity.Role;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import javax.annotation.processing.Generated;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-03-01T11:16:55+0700",
+    date = "2026-03-02T09:25:28+0700",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21 (Eclipse Adoptium)"
 )
 @Component

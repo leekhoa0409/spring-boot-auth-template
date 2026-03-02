@@ -1,8 +1,8 @@
 package com.auth.template.mapper;
 
-import com.auth.template.modules.user.dto.request.PermissionRequest;
-import com.auth.template.modules.user.dto.response.PermissionResponse;
-import com.auth.template.modules.user.entity.Permission;
+import com.auth.template.modules.auth.dto.request.PermissionRequest;
+import com.auth.template.modules.auth.dto.response.PermissionResponse;
+import com.auth.template.modules.auth.entity.Permission;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

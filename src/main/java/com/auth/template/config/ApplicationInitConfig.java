@@ -1,10 +1,10 @@
 package com.auth.template.config;
 
-import com.auth.template.modules.user.entity.Permission;
-import com.auth.template.modules.user.entity.Role;
+import com.auth.template.modules.auth.entity.Permission;
+import com.auth.template.modules.auth.entity.Role;
 import com.auth.template.modules.user.entity.User;
-import com.auth.template.modules.user.repository.PermissionRepository;
-import com.auth.template.modules.user.repository.RoleRepository;
+import com.auth.template.modules.auth.repository.PermissionRepository;
+import com.auth.template.modules.auth.repository.RoleRepository;
 import com.auth.template.modules.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ public class ApplicationInitConfig {
     private final PasswordEncoder passwordEncoder;
 
     private final String ADMIN_USERNAME = "admin";
-    private final String ADMIN_PASSWORD = "admin";
+    private final String ADMIN_PASSWORD = "admin@123";
     private final String ADMIN_EMAIL = "admin@exmaple.com";
 
     @Bean

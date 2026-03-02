@@ -1,9 +1,8 @@
 package com.auth.template.common.exception;
 
+import com.auth.template.common.dto.ApiResponse;
 import com.auth.template.common.dto.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.springframework.http.ResponseEntity;
 
@@ -11,13 +10,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.Objects;
+import java.util.*;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
-        private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
-
         @ExceptionHandler(AppException.class)
         public ResponseEntity<ErrorResponse> handleAppException(AppException exception, HttpServletRequest request) {
                 ErrorCode errorCode = exception.getErrorCode();
@@ -40,14 +36,22 @@ public class GlobalExceptionHandler {
         }
 
         @ExceptionHandler(MethodArgumentNotValidException.class)
-        public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception, HttpServletRequest request) {
-                String enumKey = Objects.requireNonNull(exception.getFieldError()).getDefaultMessage();
-                ErrorCode errorCode = ErrorCode.valueOf(enumKey);
+        public ResponseEntity<ApiResponse<Map<String, List<String>>>> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception,
+                                                                       HttpServletRequest request) {
+                Map<String, List<String>> errors = new HashMap<>();
 
-                ErrorResponse errorResponse = new ErrorResponse();
-                errorResponse.setCode(errorCode.getCode());
-                errorResponse.setMessage(errorCode.getMessage());
-                errorResponse.setPath(request.getRequestURI());
-                return ResponseEntity.status(errorCode.getHttpStatusCode()).body(errorResponse);
+                exception.getBindingResult().getFieldErrors().forEach(error -> {
+                        String fieldName = error.getField();
+                        String errorMessage = error.getDefaultMessage();
+
+                        errors.computeIfAbsent(fieldName, k -> new ArrayList<>()).add(errorMessage);
+                });
+                ApiResponse<Map<String, List<String>>> apiResponse = ApiResponse.<Map<String, List<String>>>builder()
+                        .code(ErrorCode.VALIDATION_ERROR.getCode())
+                        .message(ErrorCode.VALIDATION_ERROR.getMessage())
+                        .result(errors)
+                        .build();
+
+                return ResponseEntity.badRequest().body(apiResponse);
         }
 }

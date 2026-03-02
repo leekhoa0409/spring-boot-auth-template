@@ -17,28 +17,51 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-  # app:
-  #   build: .
-  #   container_name: spring-boot-auth-template
-  #   ports:
-  #     - "8080:8080"
-  #   environment:
-  #     SPRING_PROFILES_ACTIVE: dev
-  #     DB_HOST: postgres
-  #     DB_PORT: 5432
-  #     DB_NAME: mydb
-  #     DB_USERNAME: postgres
-  #     DB_PASSWORD: postgres
-  #     JWT_SECRET: ${JWT_SECRET}
-  #     FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000}
-  #     MAIL_HOST: ${MAIL_HOST}
-  #     MAIL_PORT: ${MAIL_PORT}
-  #     MAIL_USERNAME: ${MAIL_USERNAME}
-  #     MAIL_PASSWORD: ${MAIL_PASSWORD}
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
-  #   restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: spring-boot-auth-template-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+#  app:
+#    build: .
+#    container_name: spring-boot-auth-template
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      SPRING_PROFILES_ACTIVE: dev
+#      DB_HOST: postgres
+#      DB_PORT: 5432
+#      DB_NAME: mydb
+#      DB_USERNAME: postgres
+#      DB_PASSWORD: postgres
+#
+#      # Bổ sung biến môi trường để Spring Boot gọi được Redis
+#      SPRING_DATA_REDIS_HOST: redis
+#      SPRING_DATA_REDIS_PORT: 6379
+#
+#      JWT_SECRET: ${JWT_SECRET}
+#      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000}
+#      MAIL_HOST: ${MAIL_HOST}
+#      MAIL_PORT: ${MAIL_PORT}
+#      MAIL_USERNAME: ${MAIL_USERNAME}
+#      MAIL_PASSWORD: ${MAIL_PASSWORD}
+#    depends_on:
+#      postgres:
+#        condition: service_healthy
+#      # Đảm bảo Redis khởi động xong và khỏe mạnh thì App mới chạy
+#      redis:
+#        condition: service_healthy
+#    restart: unless-stopped
 
 volumes:
   postgres_data:
+  redis_data:

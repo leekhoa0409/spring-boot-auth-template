@@ -7,6 +7,7 @@
 /home/leekhoa/Code/java-projects/spring-boot-auth-template/src/main/java/com/auth/template/common/exception/GlobalExceptionHandler.java
 /home/leekhoa/Code/java-projects/spring-boot-auth-template/src/main/java/com/auth/template/config/ApplicationInitConfig.java
 /home/leekhoa/Code/java-projects/spring-boot-auth-template/src/main/java/com/auth/template/config/CorsConfig.java
+/home/leekhoa/Code/java-projects/spring-boot-auth-template/src/main/java/com/auth/template/config/RedisConfig.java
 /home/leekhoa/Code/java-projects/spring-boot-auth-template/src/main/java/com/auth/template/config/SecurityConfig.java
 /home/leekhoa/Code/java-projects/spring-boot-auth-template/src/main/java/com/auth/template/config/SwaggerConfig.java
 /home/leekhoa/Code/java-projects/spring-boot-auth-template/src/main/java/com/auth/template/mapper/AuthMapper.java
@@ -31,9 +32,11 @@
 /home/leekhoa/Code/java-projects/spring-boot-auth-template/src/main/java/com/auth/template/modules/auth/entity/CustomUserDetails.java
 /home/leekhoa/Code/java-projects/spring-boot-auth-template/src/main/java/com/auth/template/modules/auth/entity/PasswordResetToken.java
 /home/leekhoa/Code/java-projects/spring-boot-auth-template/src/main/java/com/auth/template/modules/auth/entity/Permission.java
+/home/leekhoa/Code/java-projects/spring-boot-auth-template/src/main/java/com/auth/template/modules/auth/entity/RefreshToken.java
 /home/leekhoa/Code/java-projects/spring-boot-auth-template/src/main/java/com/auth/template/modules/auth/entity/Role.java
 /home/leekhoa/Code/java-projects/spring-boot-auth-template/src/main/java/com/auth/template/modules/auth/entity/VerificationToken.java
 /home/leekhoa/Code/java-projects/spring-boot-auth-template/src/main/java/com/auth/template/modules/auth/repository/PermissionRepository.java
+/home/leekhoa/Code/java-projects/spring-boot-auth-template/src/main/java/com/auth/template/modules/auth/repository/RefreshTokenRepository.java
 /home/leekhoa/Code/java-projects/spring-boot-auth-template/src/main/java/com/auth/template/modules/auth/repository/RoleRepository.java
 /home/leekhoa/Code/java-projects/spring-boot-auth-template/src/main/java/com/auth/template/modules/auth/service/AuthService.java
 /home/leekhoa/Code/java-projects/spring-boot-auth-template/src/main/java/com/auth/template/modules/auth/service/CustomUserDetailsService.java

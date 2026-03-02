@@ -19,10 +19,10 @@ public class JwtProperties {
     private String secret;
 
     @NotNull(message = "Access token expiration must not be null")
-    private Long accessTokenExpiration = 3600000L; // 1 hour
+    private Long accessTokenExpiration = 900000L;
 
     @NotNull(message = "Refresh token expiration must not be null")
-    private Long refreshTokenExpiration = 86400000L; // 24 hours
+    private Long refreshTokenExpiration = 604800L;
 
     private String issuer = "auth-template-app";
 

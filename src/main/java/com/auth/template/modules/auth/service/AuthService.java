@@ -8,7 +8,9 @@ import com.auth.template.modules.auth.dto.response.AuthResponse;
 import com.auth.template.modules.auth.dto.response.UserResponse;
 import com.auth.template.modules.auth.entity.CustomUserDetails;
 import com.auth.template.common.constant.AuthProvider;
+import com.auth.template.modules.auth.entity.RefreshToken;
 import com.auth.template.modules.auth.entity.Role;
+import com.auth.template.modules.auth.repository.RefreshTokenRepository;
 import com.auth.template.modules.user.entity.User;
 import com.auth.template.modules.auth.repository.RoleRepository;
 import com.auth.template.modules.user.repository.UserRepository;
@@ -41,6 +43,7 @@ public class AuthService {
     private final EmailService emailService;
     private final UserMapper userMapper;
     private final RoleRepository roleRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @Transactional
     public UserResponse register(RegisterRequest request) {
@@ -112,9 +115,9 @@ public class AuthService {
                 userRepository.save(user);
 
                 UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
+                logger.debug("User authorities: {}", userDetails.getAuthorities().stream().toList());
                 String accessToken = jwtService.generateAccessToken(userDetails);
-                String refreshToken = jwtService.generateRefreshToken(userDetails.getUsername());
+                String refreshToken = jwtService.generateRefreshToken(user);
 
                 logger.info("User authenticated successfully: {}", request.getUsername());
 
@@ -135,24 +138,24 @@ public class AuthService {
         throw new AppException(ErrorCode.UNAUTHENTICATED);
     }
 
-    public AuthResponse refreshToken(RefreshTokenRequest request) {
+    @Transactional
+    public AuthResponse refreshToken(String refreshToken) {
         logger.info("Attempting to refresh token");
 
-        if (!jwtService.validateRefreshToken(request.getRefreshToken())) {
-            throw new RuntimeException("Invalid refresh token");
-        }
+        RefreshToken token = refreshTokenRepository.findById(refreshToken)
+                .orElseThrow(() -> new AppException(ErrorCode.TOKEN_NOT_FOUND));
 
-        String username = jwtService.extractUserName(request.getRefreshToken());
-
-        User user = userRepository.findByUsername(username)
+        User user = userRepository.findById(token.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         UserDetails userDetails = new CustomUserDetails(user);
 
         String newAccessToken = jwtService.generateAccessToken(userDetails);
-        String newRefreshToken = jwtService.generateRefreshToken(username);
+        String newRefreshToken = jwtService.generateRefreshToken(user);
 
-        logger.info("Token refreshed successfully for user: {}", username);
+        refreshTokenRepository.delete(token);
+
+        logger.info("Token refreshed successfully for user: {}", user.getUsername());
 
         return AuthResponse.builder()
                 .accessToken(newAccessToken)

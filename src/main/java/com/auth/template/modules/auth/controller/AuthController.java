@@ -10,9 +10,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.AbstractPropertyAccessor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,8 @@ public class AuthController {
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     private final AuthService authService;
+    private final String REFRESH_ENDPOINT = "/api/auth/refresh";
+    private final int COOKIE_TTL = 604800;
 
     @Autowired
     public AuthController(AuthService authService) {
@@ -46,16 +49,44 @@ public class AuthController {
     @Operation(summary = "Login with username and password")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
         logger.info("Login request received for username: {}", request.getUsername());
-        AuthResponse response = authService.login(request);
-        return ResponseEntity.ok(response);
+        AuthResponse authResponse = authService.login(request);
+
+        ResponseCookie springCookie = ResponseCookie.from("refresh_token", authResponse.getRefreshToken())
+                .httpOnly(true)
+                .secure(false)
+                .path(REFRESH_ENDPOINT)
+                .maxAge(COOKIE_TTL)
+                .sameSite("Strict")
+                .build();
+
+        authResponse.setRefreshToken(null);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, springCookie.toString())
+                .body(authResponse);
     }
 
     @PostMapping("/refresh")
     @Operation(summary = "Refresh access token")
-    public ResponseEntity<AuthResponse> refresh(@Valid @RequestBody RefreshTokenRequest request) {
+    public ResponseEntity<AuthResponse> refresh(
+            @CookieValue(name = "refresh_token", required = true) String refreshToken) {
         logger.info("Token refresh request received");
-        AuthResponse response = authService.refreshToken(request);
-        return ResponseEntity.ok(response);
+
+        AuthResponse authResponse = authService.refreshToken(refreshToken);
+
+        ResponseCookie springCookie = ResponseCookie.from("refresh_token", authResponse.getRefreshToken())
+                .httpOnly(true)
+                .secure(false)
+                .path(REFRESH_ENDPOINT)
+                .maxAge(COOKIE_TTL)
+                .sameSite("Strict")
+                .build();
+
+        authResponse.setRefreshToken(null);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, springCookie.toString())
+                .body(authResponse);
     }
 
     @GetMapping("/verify-email")

@@ -24,6 +24,7 @@ public enum ErrorCode {
     VERIFICATION_TOKEN_EXPIRED(2007, "Verification token expired", HttpStatus.UNAUTHORIZED),
     VERIFICATION_TOKEN_USED(2008, "Token has already been used", HttpStatus.BAD_REQUEST),
     INVALID_RESET_PASSWORD_TOKEN(2009, "Invalid reset password token", HttpStatus.UNAUTHORIZED),
+    TOKEN_NOT_FOUND(20010, "Token not found", HttpStatus.UNAUTHORIZED),
 
     // 3xxx: USER MODULE ERRORS
     USER_NOT_FOUND(3000, "User not found", HttpStatus.NOT_FOUND),

@@ -1,5 +1,6 @@
 package com.auth.template.modules.auth.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Schema(description = "Authentication response with JWT tokens")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AuthResponse {
 
     @JsonProperty("access_token")

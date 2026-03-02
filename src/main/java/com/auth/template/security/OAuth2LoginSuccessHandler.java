@@ -2,6 +2,8 @@ package com.auth.template.security;
 
 import com.auth.template.common.constant.AuthProvider;
 import com.auth.template.modules.auth.entity.CustomUserDetails;
+import com.auth.template.modules.auth.entity.Role;
+import com.auth.template.modules.auth.repository.RoleRepository;
 import com.auth.template.modules.auth.service.JWTService;
 import com.auth.template.modules.user.entity.User;
 import com.auth.template.modules.user.repository.UserRepository;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Optional;
 
 @Component
@@ -28,6 +31,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     private final JWTService jwtService;
     private final UserRepository userRepository;
     private static final Logger logger = LoggerFactory.getLogger(OAuth2LoginSuccessHandler.class);
+    private final RoleRepository roleRepository;
 
     @Value("${app.frontend-url}")
     private String frontEndUrl;
@@ -54,6 +58,8 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
             user = existingUser.get();
         } else {
             logger.info("Create new user from Google OAuth2: {}", email);
+            HashSet<Role> roles = new HashSet<>();
+            roleRepository.findById("USER").ifPresent(role -> roles.add(role));
             user = User.builder()
                     .username(generatedUsername)
                     .email(email)
@@ -62,6 +68,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
                     .providerId(providerId)
                     .emailVerified(true)
                     .enabled(true)
+                    .roles(roles)
                     .imageUrl(oAuth2User.getAttribute("picture"))
                     .build();
         }
@@ -73,7 +80,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         CustomUserDetails customUserDetails = new CustomUserDetails(savedUser);
 
         String accessToken = jwtService.generateAccessToken(customUserDetails);
-        String refreshToken = jwtService.generateRefreshToken(customUserDetails.getUsername());
+        String refreshToken = jwtService.generateRefreshToken(savedUser);
 
         String targetUrl =
                 frontEndUrl + "/oauth2/redirect?accessToken=" + accessToken + "&refreshToken=" + refreshToken;

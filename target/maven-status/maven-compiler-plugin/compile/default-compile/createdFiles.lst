@@ -29,6 +29,7 @@ com/auth/template/security/JwtProperties.class
 com/auth/template/modules/auth/entity/PasswordResetToken$PasswordResetTokenBuilder.class
 com/auth/template/modules/auth/controller/RoleController.class
 com/auth/template/modules/auth/service/PermissionService.class
+com/auth/template/config/RedisConfig.class
 com/auth/template/common/dto/ApiResponse$ApiResponseBuilder.class
 com/auth/template/modules/auth/entity/Role$RoleBuilder.class
 com/auth/template/modules/auth/service/JWTService.class
@@ -55,8 +56,11 @@ com/auth/template/modules/auth/controller/AuthController.class
 com/auth/template/modules/auth/dto/request/PermissionRequest$PermissionRequestBuilder.class
 com/auth/template/security/CustomAutheticationEntryPoint.class
 com/auth/template/modules/auth/entity/Permission$PermissionBuilder.class
+com/auth/template/modules/auth/entity/RefreshToken.class
 com/auth/template/modules/auth/dto/response/RoleResponse.class
 com/auth/template/modules/auth/entity/PasswordResetToken.class
+com/auth/template/modules/auth/repository/RefreshTokenRepository.class
+com/auth/template/modules/auth/entity/RefreshToken$RefreshTokenBuilder.class
 com/auth/template/modules/auth/service/EmailService.class
 com/auth/template/common/dto/ErrorResponse$ErrorResponseBuilder.class
 com/auth/template/modules/auth/entity/VerificationToken$VerificationTokenBuilder.class

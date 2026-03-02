@@ -2,24 +2,29 @@ package com.auth.template.modules.auth.service;
 
 import com.auth.template.common.exception.AppException;
 import com.auth.template.common.exception.ErrorCode;
+import com.auth.template.modules.auth.entity.RefreshToken;
+import com.auth.template.modules.auth.repository.RefreshTokenRepository;
+import com.auth.template.modules.user.entity.User;
+import com.auth.template.modules.user.repository.UserRepository;
 import com.auth.template.security.JwtProperties;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.crypto.SecretKey;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -29,10 +34,12 @@ public class JWTService {
     private static final Logger logger = LoggerFactory.getLogger(JWTService.class);
 
     private final JwtProperties jwtProperties;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @Autowired
-    public JWTService(JwtProperties jwtProperties) {
+    public JWTService(JwtProperties jwtProperties, RefreshTokenRepository refreshTokenRepository, UserRepository userRepository) {
         this.jwtProperties = jwtProperties;
+        this.refreshTokenRepository = refreshTokenRepository;
         logger.info("JWTService initialized with issuer: {}", jwtProperties.getIssuer());
     }
 
@@ -49,11 +56,22 @@ public class JWTService {
         return generateToken(claims, userDetails.getUsername(), jwtProperties.getAccessTokenExpiration());
     }
 
-    public String generateRefreshToken(String username) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("type", "refresh");
+//    public String generateRefreshToken(String username) {
+//        Map<String, Object> claims = new HashMap<>();
+//        claims.put("type", "refresh");
+//
+//        return generateToken(claims, username, jwtProperties.getRefreshTokenExpiration());
+//    }
 
-        return generateToken(claims, username, jwtProperties.getRefreshTokenExpiration());
+    public String generateRefreshToken(User user) {
+        String token = UUID.randomUUID().toString();
+        UUID userId = user.getId();
+        refreshTokenRepository.save(RefreshToken.builder()
+                .token(token)
+                .userId(userId)
+                .expiration(jwtProperties.getRefreshTokenExpiration())
+                .build());
+        return token;
     }
 
     private String generateToken(Map<String, Object> claims, String subject, Long expiration) {
@@ -102,13 +120,22 @@ public class JWTService {
         }
     }
 
-    public String extractRoles(String token) {
+    public List<String> extractRoles(String token) {
         try {
             Claims claims = extractAllClaims(token);
-            return claims.get("roles", String.class);
+
+            List<?> rawRoles = claims.get("roles", List.class);
+
+            if (rawRoles != null) {
+                return rawRoles.stream()
+                        .map(Object::toString)
+                        .collect(Collectors.toList());
+            }
+            return new ArrayList<>();
+
         } catch (Exception e) {
             logger.warn("Error extracting roles from token: {}", e.getMessage());
-            return "";
+            return new ArrayList<>();
         }
     }
 
@@ -134,18 +161,10 @@ public class JWTService {
             final String username = extractUserName(token);
             final Claims claims = extractAllClaims(token);
 
-            // Validate username matches
             boolean usernameValid = username.equals(userDetails.getUsername());
-
-            // Validate token not expired
             boolean notExpired = !isTokenExpired(token);
-
-            // Validate issuer
             boolean issuerValid = jwtProperties.getIssuer().equals(claims.getIssuer());
-
-            // Validate audience
             boolean audienceValid = claims.getAudience().contains(jwtProperties.getAudience());
-
             boolean isValid = usernameValid && notExpired && issuerValid && audienceValid;
 
             if (!isValid) {
@@ -159,27 +178,24 @@ public class JWTService {
         }
     }
 
-    public boolean validateRefreshToken(String token) {
-        try {
-            final Claims claims = extractAllClaims(token);
-
-            // Check if it's a refresh token
-            String tokenType = claims.get("type", String.class);
-            if (!"refresh".equals(tokenType)) {
-                logger.warn("Token is not a refresh token");
-                return false;
-            }
-
-            // Validate token not expired
-            boolean notExpired = !isTokenExpired(token);
-
-            // Validate issuer
-            boolean issuerValid = jwtProperties.getIssuer().equals(claims.getIssuer());
-
-            return notExpired && issuerValid;
-        } catch (Exception e) {
-            logger.error("Error validating refresh token: {}", e.getMessage());
-            return false;
-        }
-    }
+//    public boolean validateRefreshToken(String token) {
+//        try {
+//            final Claims claims = extractAllClaims(token);
+//
+//            String tokenType = claims.get("type", String.class);
+//            if (!"refresh".equals(tokenType)) {
+//                logger.warn("Token is not a refresh token");
+//                return false;
+//            }
+//
+//            boolean notExpired = !isTokenExpired(token);
+//
+//            boolean issuerValid = jwtProperties.getIssuer().equals(claims.getIssuer());
+//
+//            return notExpired && issuerValid;
+//        } catch (Exception e) {
+//            logger.error("Error validating refresh token: {}", e.getMessage());
+//            return false;
+//        }
+//    }
 }

@@ -20,19 +20,32 @@ public class CustomAutheticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        ErrorCode errorCode = ErrorCode.UNAUTHENTICATED;
+        String requestUri = request.getRequestURI();
+        String acceptHeader = request.getHeader("Accept");
 
-        response.setStatus(errorCode.getHttpStatusCode().value());
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setCharacterEncoding("UTF-8");
+        boolean isApiRequest = requestUri.startsWith("/api/") ||
+                (acceptHeader != null && acceptHeader.contains(MediaType.APPLICATION_JSON_VALUE));
 
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .code(errorCode.getCode())
-                .message(errorCode.getMessage())
-                .path(request.getRequestURI())
-                .build();
+        if (isApiRequest) {
+            // 1. NẾU LÀ API: Trả về JSON 401 (Logic cũ của bạn)
+            ErrorCode errorCode = ErrorCode.UNAUTHENTICATED;
 
-        response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
-        response.flushBuffer();
+            response.setStatus(errorCode.getHttpStatusCode().value());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("UTF-8");
+
+            ErrorResponse errorResponse = ErrorResponse.builder()
+                    .code(errorCode.getCode())
+                    .message(errorCode.getMessage())
+                    .path(request.getRequestURI())
+                    .build();
+
+            response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
+            response.flushBuffer();
+        }
+        else {
+            // 2. NẾU LÀ TRÌNH DUYỆT: Redirect thẳng sang Google OAuth2
+            response.sendRedirect("/oauth2/authorization/google");
+        }
     }
 }

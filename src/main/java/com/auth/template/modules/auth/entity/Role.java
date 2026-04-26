@@ -5,21 +5,22 @@ import lombok.*;
 
 import java.util.Set;
 
-@Entity
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "roles")
 @Builder
+@Entity
+@Table(name = "roles")
 public class Role {
     @Id
-    @Column(nullable = false, unique = true, length = 50)
+    @Column(nullable = false, unique = true, length = 20)
     private String roleName;
 
     @Column(nullable = false, unique = true, length = 50)
     private String description;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     Set<Permission> permissions;
 }

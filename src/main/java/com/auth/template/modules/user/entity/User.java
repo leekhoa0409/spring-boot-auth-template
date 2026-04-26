@@ -11,16 +11,17 @@ import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
-@Entity
-@Table(name = "users", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "username"),
-        @UniqueConstraint(columnNames = "email")
-})
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Entity
+@Table(name = "users", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "username"),
+        @UniqueConstraint(columnNames = "email")
+})
 public class User {
 
     @Id
@@ -74,7 +75,7 @@ public class User {
     private String providerId; // OAuth2 provider user ID
 
     @Column(length = 50)
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     private Set<Role> roles;
 
     @CreationTimestamp

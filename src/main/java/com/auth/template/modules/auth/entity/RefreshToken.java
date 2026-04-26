@@ -1,5 +1,6 @@
 package com.auth.template.modules.auth.entity;
 
+import jakarta.persistence.Column;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
@@ -18,6 +19,7 @@ public class RefreshToken {
     @Id
     private String token;
 
+    @Column(nullable = false)
     private UUID userId;
 
     @TimeToLive

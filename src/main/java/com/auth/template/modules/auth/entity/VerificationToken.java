@@ -8,13 +8,13 @@ import java.util.UUID;
 
 import com.auth.template.modules.user.entity.User;
 
-@Entity
-@Table(name = "verification_tokens")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Entity
+@Table(name = "verification_tokens")
 public class VerificationToken {
 
     @Id

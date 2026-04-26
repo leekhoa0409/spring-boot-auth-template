@@ -8,13 +8,14 @@ import java.util.UUID;
 
 import com.auth.template.modules.user.entity.User;
 
-@Entity
-@Table(name = "password_reset_tokens")
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Entity
+@Table(name = "password_reset_tokens")
 public class PasswordResetToken {
 
     @Id
